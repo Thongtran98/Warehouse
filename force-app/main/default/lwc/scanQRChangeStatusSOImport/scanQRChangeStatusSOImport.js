@@ -262,7 +262,7 @@ export default class scanQRChangeStatusSOImport extends LightningElement {
                             let recordInputP = { 
                                 fields : fieldP
                             };
-                            alert(record.PackageStatus__c);
+                            
                             if(record.PackageStatus__c === 'Đã lấy' || record.PackageStatus__c === 'Đang xuất kho'){
                                 updateRecord(recordInputP)
                                 .then(() => {
