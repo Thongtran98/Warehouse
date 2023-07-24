@@ -38,7 +38,7 @@ import LOCATION_PACKITEM from '@salesforce/schema/Stock_In_Package__c.WarehouseL
 import RACK_PACKITEM from '@salesforce/schema/Stock_In_Package__c.StorageRack__c';
 import SCHEDULE_PACKITEM from '@salesforce/schema/Stock_In_Package__c.ScheduleID__c';
 import NAME_PACKITEM from '@salesforce/schema/Stock_In_Package__c.Name';
-
+//test ở đây
 export default class ScanQRMulti extends LightningElement {
     myScanner;
     screenNumber = "1";
