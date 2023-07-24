@@ -1,0 +1,23 @@
+<template>
+    <div class="container">
+        <div class="center clear-it">
+            <div class="slds-text-heading_large large-text">Barcode Scanner</div>
+            <img class="splash" src={splashLogo}>
+            <div class="slds-text-body_regular medium-text">Đưa thiết bị đến mã QR cần quét</div>
+        </div>
+        <div>
+            <lightning-combobox
+                name="Select Object"
+                label="Select Object"
+                value={value}
+                placeholder="Select Object"
+                options={warehouseShow} 
+                onchange={handleChange}>
+                
+            </lightning-combobox>
+            </div>
+        <div>
+            <lightning-button label="Lưu" onclick={clickChange} variant="base" class="slds-m-left_small nav-button right"></lightning-button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,24 @@
+<aura:component controller="AddMultiplePackageController"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:availableForFlowScreens,lightning:availableForFlowActions"
+    access="global">
+    <aura:html tag="style">
+        .cuf-content { padding: 0 0rem !important; } .slds-p-around--medium {
+        padding: 0rem !important; } .slds-modal__content{ height:unset !important;
+        max-height:unset !important; } .slds-modal__container{ max-width: 100rem
+        !important; width:100% !important; }
+    </aura:html>
+    <aura:attribute name="checkPoint" type="Boolean" default="false" />
+    <aura:registerEvent name="showFlow" type="c:FlowEvent"/>
+    <aura:attribute type="Boolean" name="ismodalClicked" />
+    <div class="Header" style="background-color: #F3F3F3; display: flex;justify-content: space-between;border-radius: 6px;">
+        <div class="icon" style="display: flex; width: 205px; align-items: center; margin-left: 15px;">
+            <div style="width: 45%;">
+                <img style="width: 70%;background-color: #DF6184;" src="https://afr-wms.my.salesforce.com/img/icon/t4v35/custom/custom13_120.png" alt="" title=""/>
+            </div>
+            <p style="font-size: 18px;width: 200px;">Tạo đơn</p>
+        </div>
+        <div class="lstButton" style="margin: 15px 10px 15px 0px">
+            <lightning:button onclick="{!c.openFlow}">Tạo tài khoản</lightning:button>
+        </div>
+    </div>
+</aura:component>

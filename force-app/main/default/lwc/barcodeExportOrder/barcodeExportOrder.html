@@ -1,0 +1,53 @@
+<template>
+   <div style="height: 100%;">
+        <template if:false={showSettings}>
+            <div style="align-items: center;margin-left: 120px;" class="center buttons">
+                <div style="margin-bottom: 12px;">
+                    <lightning-button label="Scan xuất kho" onclick={openSingleScan} class="slds-m-left_x-small flextest">Scan xuất kho</lightning-button>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <lightning-button label="Scan Package" onclick={openMultiScan} class="slds-m-left_x-small flextest">Scan Package</lightning-button>
+                </div>
+            </div>
+            <div class="container">
+                <c-controls onshowsettingsclick={settingsButtonPressed}></c-controls>
+                <p class="slds-text-heading_large" style="margin: 12px">My Scans</p>
+                <lightning-tabset active-tab-value={selectedTab}>
+                        <lightning-tab label="Single Scans" value="single">
+                            <ul class="no-bullets">
+                                <template iterator:it={singleScanRecords}>
+                                    <li key={it.value.id}>
+                                        <c-scan-list-item scan-type="single" item={it.value} is-first-item={it.first} onitemclick={viewDetail} ondeleteitemclick={deleteDetail}></c-scan-list-item>
+                                    </li>
+                                </template>
+                            </ul>
+                            <ul>
+                                <div>
+                                    <lightning-button label="Save" onclick={savePressed} variant="base" class="slds-m-left_small nav-button right"></lightning-button>
+                                </div>
+                            </ul>
+                        </lightning-tab>
+                        <lightning-tab style="height: 900px;" label="Package Scans" value="multi">
+                            <ul class="no-bullets">
+                                <template iterator:it={multipleScanRecords}>
+                                    <li key={it.value.id}>
+                                        <c-scan-list-item scan-type="multi" item={it.value} is-first-item={it.first} onitemclick={viewDetail} ondeleteitemclick={deleteDetail}></c-scan-list-item>
+                                    </li>
+                                </template>
+                            </ul>
+                            <ul style="height: 900px;">
+                                <div>
+                                    <lightning-button label="Save" onclick={savePressed} variant="base" class="slds-m-left_small nav-button right"></lightning-button>
+                                </div>
+                            </ul>
+                        </lightning-tab>
+                </lightning-tabset>
+
+            </div>
+        </template>
+
+        <template if:true={showSettings}>
+            <c-scanner-settings settings={settings} onbackbuttonclick={settingsBackPressed} onsettingtoggled={settingToggled}></c-scanner-settings>
+        </template>
+   </div>
+</template>

@@ -1,0 +1,17 @@
+<aura:component controller="AddMultiplePackageController"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:availableForFlowScreens,lightning:availableForFlowActions"
+    access="global">
+    <aura:html tag="style">
+        .cuf-content { padding: 0 0rem !important; } .slds-p-around--medium {
+        padding: 0rem !important; } .slds-modal__content{ height:unset !important;
+        max-height:unset !important; } .slds-modal__container{ max-width: 100rem
+        !important; width:100% !important; }
+    </aura:html>
+    <aura:attribute type="Boolean" name="ismodalClicked" />
+    <aura:attribute name="showFlow" type="Boolean" default="false"/>
+    <aura:handler event="c:FlowEvent" action="{!c.doInit}" />
+    <aura:if isTrue="{!v.showFlow}">
+        <lightning:flow aura:id="flowData" />
+    </aura:if>
+    <!-- <aura:handler event="c:SearchResult" action="{!c.init}" /> -->
+</aura:component>

@@ -1,0 +1,53 @@
+.THIS .slds-form-element__icon {
+    /* Replace this class name "slds-form-element__icon" by your finding. */
+    display: none !important;
+}
+
+/* .THIS {
+    margin: 0px 30px !important;
+} */
+
+.THIS .slds-form-element__label {
+    display: none !important;
+    padding: 0px !important;
+}
+
+.THIS .slds-text-color_destructive {
+    display: none;
+}
+
+/* .THIS table,
+.THIS th,
+.THIS td {
+    padding: 0px 2px !important;
+    margin: 0px !important;
+} */
+
+.THIS .myTable,
+.THIS .myTable th,
+.THIS .myTable td {
+    padding: 0px 5px 10px 0px !important;
+}
+
+.THIS td {
+    vertical-align: top !important;
+}
+
+.THIS .spinner {
+    height: 100%;
+}
+
+.THIS .myBtn {
+    background-color: #E5E5E5;
+     border: none;
+    /*color: white;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 0.7; */
+}
+
+.THIS .myCheckbox{
+    display: inline-block;
+    margin-left: 5px;
+}

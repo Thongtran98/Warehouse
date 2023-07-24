@@ -1,0 +1,11 @@
+<template>
+    <div class="container">
+        <div style="text-align: center;" class="center clear-it">
+            <div class="slds-text-body_regular medium-text"><strong>Vui lòng chọn Warehouse Location</strong></div>
+        </div>
+        <div class="slds-align_absolute-center slds-m-vertical_large">  
+            <lightning-button style="border-radius: 15%;padding: 5px 10px;text-align: center;border-color: #313132;" class="slds-var-m-left_x-small" label="Quét đơn hàng" onclick={onScan} variant="base"></lightning-button>
+            <lightning-button style="border-radius: 15%;padding: 5px 10px;text-align: center;border-color: #313132;" class="slds-var-m-left_x-small" label="Quét Package" onclick={onScanPackage} variant="base"></lightning-button>
+        </div>
+    </div>
+</template>

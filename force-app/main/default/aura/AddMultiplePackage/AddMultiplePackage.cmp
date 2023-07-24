@@ -1,0 +1,862 @@
+<aura:component controller="AddMultiplePackageController"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:availableForFlowScreens,lightning:availableForFlowActions"
+    access="global">
+    <aura:html tag="style">
+        .cuf-content { padding: 0 0rem !important; } .slds-p-around--medium {
+        padding: 0rem !important; } .slds-modal__content{ height:unset !important;
+        max-height:unset !important; } .slds-modal__container{ max-width: 100rem
+        !important; width:100% !important; }
+    </aura:html>
+    <!-- <ltng:require styles="{!$Resource.HideHeader}"/> -->
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}" />
+    <aura:attribute name="Order" type="F_TMS_SO__c" default="
+                    {'sobjectType':'F_TMS_SO__c',
+                    'Receiver_Name__c': '',
+                    'Sender_Phone__c': '',
+                    'Receiver_Phone__c': '',
+                    'Sender_Address__c': '',
+                    'Receiver_address__c': '',
+                    'Invoice_To__c': '',
+                    'Need_To_COD__c': false,
+                    'Parcel_name__c': '',
+                    'Length_cm__c': '',
+                    'Shipping_charge__c': '',
+                    'codeuqalcargovalue__c': false,
+                    'Parcel_category__c': '',
+                    'Width_cm__c': '',
+                    'E_shipping_charge__c': '',
+                    'Waiting_Time_day__c': '',
+                    'Description_of_parcel__c': '',
+                    'Height_cm__c': '',
+                    'Cash_on_delivery__c': '',
+                    'Discount_code__c': '',
+                    'Insurance__c': '',
+                    'Shipping_Payment_remarks__c': '',
+                    'Lift_On_Lift_Off__c': '',
+                    'Ph_b_c_x_p_1_u__c': '',
+                    'Ph_b_c_x_p_2_u__c': '',
+                    'Toll__c': '',}" />
+    <aura:attribute name="Order1" type="F_TMS_SO__c" default="
+                    {'sobjectType':'F_TMS_SO__c',
+                    'Receiver_Name__c': '',
+                    'Sender_Phone__c': '',
+                    'Receiver_Phone__c': '',
+                    'Sender_Address__c': '',
+                    'Receiver_address__c': '',
+                    'Invoice_To__c': '',
+                    'Need_To_COD__c': false,
+                    'Parcel_name__c': '',
+                    'Length_cm__c': '',
+                    'Shipping_charge__c': '',
+                    'codeuqalcargovalue__c': false,
+                    'Parcel_category__c': '',
+                    'Width_cm__c': '',
+                    'E_shipping_charge__c': '',
+                    'Waiting_Time_day__c': '',
+                    'Description_of_parcel__c': '',
+                    'Height_cm__c': '',
+                    'Cash_on_delivery__c': '',
+                    'Discount_code__c': '',
+                    'Insurance__c': '',
+                    'Shipping_Payment_remarks__c': '',
+                    'Lift_On_Lift_Off__c': '',
+                    'Ph_b_c_x_p_1_u__c': '',
+                    'Ph_b_c_x_p_2_u__c': '',
+                    'Toll__c': '',}" />
+    <!-- <aura:attribute name="lstPackage" type="Package__c[]" default="
+                    {'sobjectType':'Package__c',
+                    'Parcel_Name__c': '',
+                    'Parcel_Value__c': '',
+                    'Gross_Weight_Kg__c': '',
+                    'Quantity__c': '',
+                     }" />
+    <aura:attribute name="lstPackage1" type="Package__c[]" default="
+                    {'sobjectType':'Package__c',
+                    'Parcel_Name__c': '',
+                    'Parcel_Value__c': '',
+                    'Gross_Weight_Kg__c': '',
+                    'Quantity__c': '',
+                     }" /> -->
+    <aura:attribute name="lstPackage" type="Package__c[]" />
+    <aura:attribute name="lstPackage1" type="Package__c[]" />
+    <aura:attribute name="fieldLabels" type="Object" />
+    <aura:attribute access="global" name="Record1" type="boolean" default="true" />
+    <aura:attribute access="global" name="Record2" type="boolean" default="false" />
+    <aura:attribute name="senderName" type="String" />
+    <aura:attribute name="senderCity" type="String" />
+    <aura:attribute name="senderDistrict" type="String" />
+    <aura:attribute name="senderWard" type="String" />
+    <aura:attribute name="receiverCity" type="String" />
+    <aura:attribute name="receiverDistrict" type="String" />
+    <aura:attribute name="receiverWard" type="String" />
+    <aura:attribute name="testAttr" type="String"/>
+    <!-- <aura:handler name="init" action="{!c.doInit}" value="{!this}"/> -->
+    <!-- <lightning:flow aura:id="flowData"/>
+    <aura:attribute type="Boolean" name="ismodalClicked"/>
+<lightning:button onclick="{!c.openmodal}">Start Flow</lightning:button>
+<aura:if isTrue="{!v.ismodalClicked}">
+    <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="Modalbox" class="slds-modal">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <button class="slds-button slds-modal__close" title="Close" onclick="{!c.closeModal}">
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="header43" class="">Test Modal</h2>
+            </div>
+            <div class="slds-modal__content ">
+                <div>
+                    <lightning:flow aura:id="flowData"/>
+                </div>
+            </div>
+            <div class="slds-modal__footer">
+            </div>
+        </div>
+    </div>
+</aura:if> -->
+<div class="slds-backdrop " aura:id="Modalbackdrop"></div>
+    <div style="position: relative;">
+        <lightning:spinner aura:id="spinner" alternativeText="Loading" class="slds-hide" />
+        <div style="background-color: white;">
+            <div colspan="4" style="font-size: 20px; font-weight: bold;padding: 20px 0px 5px 20px;">Tạo mới đơn hàng
+            </div>
+            <div style="display: flex; background-color: white;padding-bottom: 10px;">
+                <div style="display: flex;">
+                    <div style="margin-left: 15px;">
+                        <ui:inputRadio text="Record1" name="radioBtn" label="" change="{!c.radioButtonAction}"
+                            value="true" />
+                        Giao nhận Nội thành - Liên tỉnh
+                    </div>
+
+                    <div style="margin-left: 25px;">
+                        <ui:inputRadio text="Record2" name="radioBtn" label="" change="{!c.radioButtonAction}" /> Chuyển
+                        phát
+                        bưu kiện trong nước
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <aura:if isTrue="{!v.Record1}"> -->
+        <div style="{!IF(v.Record1 == true, 'padding: 0px 15px; background-color:white;', 'display:none;')}">
+
+            <!-- <aura:iteration items="{!v.Order}" var="bill" indexVar="index"> -->
+            <lightning:recordEditForm aura:id="recordEditForm" objectApiName="F_TMS_SO__c">
+                <div class="container-fluid ">
+                    <table style="width: 100%;">
+                        <col width="25%" />
+                        <col width="24.5%" />
+                        <col width="1%" />
+                        <col width="25%" />
+                        <col width="24.5%" />
+                        <tr>
+                            <th colspan="2" style="background-color: #E5E5E5">
+                                <div class="slds-truncate" style="font-weight: bold;font-size: 15px;">Thông tin người
+                                    gửi
+                                </div>
+                            </th>
+                            <td></td>
+                            <th colspan="2" style="background-color: #E5E5E5">
+                                <div class="slds-truncate" style="font-weight: bold;font-size: 15px;">Thông tin người
+                                    nhận
+                                </div>
+                            </th>
+                        </tr>
+                        <tr style="border-color: white; background-color: rgb(188, 210, 238, 0); overflow-x: hidden;">
+                            <td style=" background-color: rgb(188, 210, 238, 0); padding: 0px 4px;">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_Name__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId" label="Sender Name" plurallabel="Account"
+                                    objectType="Account" primarySearchField="Name" selectedRecordId="{!v.senderName}"
+                                    dropDownLimit="300" fuzzySearch="true" dropDownQuery="Name != null" />
+                            </td>
+                            <td style=" background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299"
+                                    part="label">{!v.fieldLabels.Sender_City_Province__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId1" label="Sender City/Province" 
+                                    plurallabel="City_Province__c" objectType="City_Province__c"
+                                    primarySearchField="Name" selectedRecordId="{!v.senderCity}"
+                                    dropDownQuery="Name != null" />
+                            </td>
+                            <td></td>
+                            <td>
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Receiver_Name__c}</label>
+                                <lightning:inputField aura:id="field" fieldName="Receiver_Name__c"
+                                    value="{!v.Order.Receiver_Name__c}" />
+                            </td>
+                            <td style=" background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299"
+                                    part="label">{!v.fieldLabels.Receiver_City_Province__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId2" label="Receiver City/Province"
+                                    objectType="City_Province__c" primarySearchField="Name"
+                                    selectedRecordId="{!v.receiverCity}" dropDownQuery="Name != null" />
+                            </td>
+                        </tr>
+                        <tr style="border-color: white; background-color: rgb(188, 210, 238, 0); overflow-x: hidden;">
+                            <td>
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_Phone__c}</label>
+                                <lightning:inputField aura:id="field" fieldName="Sender_Phone__c"
+                                    value="{!v.Order.Sender_Phone__c}" />
+                            </td>
+                            <td style=" background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_District__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId3" label="Sender District"
+                                    objectType="District__c" primarySearchField="Name"
+                                    selectedRecordId="{!v.senderDistrict}"
+                                    queryCondition="{!'City_Province__c=\'' + v.senderCity + '\''}" />
+                            </td>
+                            <td></td>
+                            <td>
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Receiver_Phone__c}</label>
+                                <lightning:inputField aura:id="field" fieldName="Receiver_Phone__c"
+                                    value="{!v.Order.Receiver_Phone__c}" />
+                            </td>
+                            <td style=" background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299"
+                                    part="label">{!v.fieldLabels.Receiver_District__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId4" label="Receiver District"
+                                    objectType="District__c" primarySearchField="Name"
+                                    selectedRecordId="{!v.receiverDistrict}"
+                                    queryCondition="{!'City_Province__c=\'' + v.receiverCity + '\''}"
+                                    dropDownQuery="Name != null" />
+                            </td>
+                        </tr>
+                        <tr style="border-color: white; background-color: rgb(188, 210, 238, 0); overflow-x: hidden;">
+                            <td></td>
+                            <td style=" background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_Ward__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId5" label="Sender Ward" objectType="Ward__c"
+                                    primarySearchField="Name" selectedRecordId="{!v.senderWard}"
+                                    queryCondition="{!'City_Province__c=\'' + v.senderCity + '\' AND District__c=\'' + v.senderDistrict + '\''}"
+                                    dropDownQuery="Name != null" />
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td style="background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Receiver_Ward__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId6" label="Receiver Ward" objectType="Ward__c"
+                                    primarySearchField="Name" selectedRecordId="{!v.receiverWard}"
+                                    queryCondition="{!'City_Province__c=\'' + v.receiverCity + '\' AND District__c=\'' + v.receiverDistrict + '\''}"
+                                    dropDownQuery="Name != null" />
+                            </td>
+                        </tr>
+                        <tr style="border-color: white; background-color: rgb(188, 210, 238, 0); overflow-x: hidden;">
+                            <td></td>
+                            <td>
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_Address__c}</label>
+                                <lightning:inputField aura:id="field" fieldName="Sender_Address__c"
+                                    value="{!v.Order.Sender_Address__c}" />
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <label class="" for="input-299"
+                                    part="label">{!v.fieldLabels.Receiver_address__c}</label>
+                                <lightning:inputField aura:id="field" fieldName="Receiver_address__c"
+                                    value="{!v.Order.Receiver_address__c}" />
+                            </td>
+                        </tr>
+                        <br />
+                        <br />
+                    </table>
+
+                    <div style="display: flex;">
+                        <div style="width: 49.5%;">
+                            <table style="width: 100%;">
+                                <col width="25%" />
+                                <col width="24.5%" />
+                                <tr>
+                                    <th colspan="2" style="background-color: #E5E5E5;padding: 0px; ">
+                                        <div class="slds-truncate" style="font-weight: bold;font-size: 15px;">Cước Phí
+                                        </div>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top;">
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Invoice_To__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Invoice_To__c"
+                                            value="{!v.Order.Invoice_To__c}" />
+                                    </td>
+                                    <td style="vertical-align: middle !important;">
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Need_To_COD__c}</label>
+                                        <lightning:input class="myCheckbox" type="checkbox"
+                                            value="{!v.Order.Need_To_COD__c}" checked="{!v.Order.Need_To_COD__c}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top;">
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.E_shipping_charge__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="E_shipping_charge__c"
+                                            value="{!v.Order.E_shipping_charge__c}" />
+                                    </td>
+                                    <td style="vertical-align: middle !important;">
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.codeuqalcargovalue__c}</label>
+                                        <lightning:input class="myCheckbox" type="checkbox"
+                                            value="{!v.Order.codeuqalcargovalue__c}"
+                                            checked="{!v.Order.codeuqalcargovalue__c}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.E_shipping_charge__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="E_shipping_charge__c"
+                                            value="{!v.Order.E_shipping_charge__c}" />
+                                    </td>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Waiting_Time_day__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Waiting_Time_day__c"
+                                            value="{!v.Order.Waiting_Time_day__c}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Cash_on_delivery__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Cash_on_delivery__c"
+                                            value="{!v.Order.Cash_on_delivery__c}" />
+                                    </td>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Discount_code__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Discount_code__c"
+                                            value="{!v.Order.Discount_code__c}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Insurance__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Insurance__c"
+                                            value="{!v.Order.Insurance__c}" />
+                                    </td>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Lift_On_Lift_Off__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Lift_On_Lift_Off__c"
+                                            value="{!v.Order.Lift_On_Lift_Off__c}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Ph_b_c_x_p_1_u__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Ph_b_c_x_p_1_u__c"
+                                            value="{!v.Order.Ph_b_c_x_p_1_u__c}" />
+                                    </td>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Ph_b_c_x_p_2_u__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Ph_b_c_x_p_2_u__c"
+                                            value="{!v.Order.Ph_b_c_x_p_2_u__c}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="" for="input-299" part="label">{!v.fieldLabels.Toll__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Toll__c"
+                                            value="{!v.Order.Toll__c}" />
+                                    </td>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Shipping_Payment_remarks__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Shipping_Payment_remarks__c"
+                                            value="{!v.Order.Shipping_Payment_remarks__c}" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="width: 1%;"></div>
+                        <div style="width: 49.5%;">
+                            <lightning:recordEditForm class="iteration" aura:id="recordEditForm"
+                                objectApiName="Package__c" onerror="{!c.onError}">
+                                <table class="myTable" style="width: 100%;">
+                                    <col width="3%" />
+                                    <col width="11%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="3.5%" />
+                                    <tr>
+                                        <th colspan="6" style="background-color: #E5E5E5;padding: 0px !important;">
+                                            <div class="slds-truncate" style="font-weight: bold;font-size: 15px;">
+                                                Thông tin hàng
+                                            </div>
+                                        </th>
+
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="padding: 0px !important;">
+                                            <label class="" for="input-299"
+                                                part="label">{!v.fieldLabels.Parcel_name__c}</label>
+                                            <lightning:inputField aura:id="field" fieldName="Parcel_name__c"
+                                                value="{!v.Order.Parcel_name__c}" />
+                                        </td>
+                                        <td colspan="3" style="padding: 0px !important;">
+                                            <label class="" for="input-299"
+                                                part="label">{!v.fieldLabels.Parcel_category__c}</label>
+                                            <lightning:inputField aura:id="field" fieldName="Parcel_category__c"
+                                                value="{!v.Order.Parcel_category__c}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <label class="" for="input-299"
+                                                part="label">{!v.fieldLabels.Length_cm__c}</label>
+                                            <lightning:inputField aura:id="field" fieldName="Length_cm__c"
+                                                value="{!v.Order.Length_cm__c}" />
+                                        </td>
+                                        <td colspan="2">
+                                            <label class="" for="input-299"
+                                                part="label">{!v.fieldLabels.Width_cm__c}</label>
+                                            <lightning:inputField aura:id="field" fieldName="Width_cm__c"
+                                                value="{!v.Order.Width_cm__c}" />
+                                        </td>
+                                        <td colspan="2">
+                                            <label class="" for="input-299"
+                                                part="label">{!v.fieldLabels.Height_cm__c}</label>
+                                            <lightning:inputField aura:id="field" fieldName="Height_cm__c"
+                                                value="{!v.Order.Height_cm__c}" />
+                                        </td>
+                                    </tr>
+                                    <br />
+                                    <br />
+                                    <tr>
+                                        <th colspan="6"
+                                            style="background-color: #E5E5E5;font-weight: bold;font-size: 15px;padding: 0px !important;">
+                                            Kiện hàng
+                                            chi tiết</th>
+                                    </tr>
+                                    <aura:iteration items="{!v.lstPackage}" var="p" indexVar="index">
+                                        <tr>
+                                            <td style="{!IF(index > 0,'border-top: 1px solid black;','')}"></td>
+                                            <td colspan="2" style="{!IF(index > 0,'border-top: 1px solid black;','')}">
+                                                <label class="" for="input-299"
+                                                    part="label">{!v.fieldLabels.Parcel_Name__c}</label>
+                                                <lightning:inputField aura:id="field" fieldName="Parcel_Name__c"
+                                                    variant="label-hidden" value="{!p.Parcel_Name__c}" />
+                                            </td>
+                                            <td colspan="2" style="{!IF(index > 0,'border-top: 1px solid black;','')}">
+                                                <label class="" for="input-299"
+                                                    part="label">{!v.fieldLabels.Parcel_Value__c}</label>
+                                                <lightning:inputField aura:id="field" fieldName="Parcel_Value__c"
+                                                    variant="label-hidden" value="{!p.Parcel_Value__c}" />
+                                            </td>
+                                            <td style="{!IF(index > 0,'border-top: 1px solid black;','')}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                {!index + 1}
+                                            </td>
+                                            <td colspan="2" style="">
+                                                <label class="" for="input-299"
+                                                    part="label">{!v.fieldLabels.Gross_Weight_Kg__c}</label>
+                                                <lightning:inputField aura:id="field" fieldName="Gross_Weight_Kg__c"
+                                                    variant="label-hidden" value="{!p.Gross_Weight_Kg__c}" />
+                                            </td>
+                                            <td colspan="2" style="">
+                                                <label class="" for="input-299"
+                                                    part="label">{!v.fieldLabels.Quantity__c}</label>
+                                                <lightning:inputField aura:id="field" fieldName="Quantity__c"
+                                                    variant="label-hidden" value="{!p.Quantity__c}" />
+                                            </td>
+                                            <td style="text-align: center">
+                                                <a onclick="{!c.removeRecord}" data-record="{!index}">
+                                                    <lightning:icon iconName="utility:delete" size="small"
+                                                        alternativeText="Delete" />
+                                                    <span class="slds-assistive-text">Delete</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                    <tr>
+                                        <th></th>
+                                        <th colspan="5">
+                                            <div>
+                                                <!-- <button class="myBtn" onclick="{!c.addRow}">&#43;</button> -->
+                                                <lightning:button class="myBtn" variant="brand" label="+"
+                                                    title="Brand action" onclick="{!c.addRow}" />
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </lightning:recordEditForm>
+                        </div>
+                    </div>
+                    <div style="display: flex;background-color: white;justify-content: center; margin-top: 30px;">
+                        <lightning:button variant="brand" label="Submit" title="Brand action"
+                            onclick="{!c.saveRecords}" />
+                    </div>
+                </div>
+            </lightning:recordEditForm>
+        </div>
+
+
+
+        <!-- <aura:if isTrue="{!v.Record1}"> -->
+        <div style="{!IF(v.Record2 == true, 'padding: 0px 15px; background-color:white;', 'display:none;')}">
+            <!-- <aura:iteration items="{!v.Order}" var="bill" indexVar="index"> -->
+            <lightning:recordEditForm aura:id="recordEditForm" objectApiName="F_TMS_SO__c">
+                <div class="container-fluid ">
+                    <table style="width: 100%;">
+                        <col width="25%" />
+                        <col width="24.5%" />
+                        <col width="1%" />
+                        <col width="25%" />
+                        <col width="24.5%" />
+                        <tr>
+                            <th colspan="2" style="background-color: #E5E5E5">
+                                <div class="slds-truncate" style="font-weight: bold;font-size: 15px;">Thông tin người
+                                    gửi
+                                </div>
+                            </th>
+                            <td></td>
+                            <th colspan="2" style="background-color: #E5E5E5">
+                                <div class="slds-truncate" style="font-weight: bold;font-size: 15px;">Thông tin người
+                                    nhận
+                                </div>
+                            </th>
+                        </tr>
+                        <tr style="border-color: white; background-color: rgb(188, 210, 238, 0); overflow-x: hidden;">
+                            <td style=" background-color: rgb(188, 210, 238, 0); padding: 0px 4px;">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_Name__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId7" label="Sender Name" objectType="Account"
+                                    primarySearchField="Name" selectedRecordId="{!v.senderName}" dropDownLimit="300"
+                                    fuzzySearch="true" dropDownQuery="Name != null" />
+                            </td>
+                            <td style=" background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_City_Province__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId8" label="Sender City/Province"
+                                    objectType="City_Province__c" primarySearchField="Name"
+                                    selectedRecordId="{!v.senderCity}" dropDownQuery="Name != null" />
+                            </td>
+                            <td></td>
+                            <td>
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Receiver_Name__c}</label>
+                                <lightning:inputField aura:id="field" fieldName="Receiver_Name__c"
+                                    value="{!v.Order1.Receiver_Name__c}" />
+                            </td>
+                            <td style=" background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Receiver_City_Province__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId9" label="Receiver City/Province"
+                                    objectType="City_Province__c" primarySearchField="Name"
+                                    selectedRecordId="{!v.receiverCity}" dropDownQuery="Name != null" />
+                            </td>
+                        </tr>
+                        <tr style="border-color: white; background-color: rgb(188, 210, 238, 0); overflow-x: hidden;">
+                            <td>
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_Phone__c}</label>
+                                <lightning:inputField aura:id="field" fieldName="Sender_Phone__c"
+                                    value="{!v.Order1.Sender_Phone__c}" />
+                            </td>
+                            <td style=" background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_District__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId10" label="Sender District"
+                                    objectType="District__c" primarySearchField="Name"
+                                    selectedRecordId="{!v.senderDistrict}"
+                                    queryCondition="{!'City_Province__c=\'' + v.senderCity + '\''}" />
+                            </td>
+                            <td></td>
+                            <td>
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Receiver_Phone__c}</label>
+                                <lightning:inputField aura:id="field" fieldName="Receiver_Phone__c"
+                                    value="{!v.Order1.Receiver_Phone__c}" />
+                            </td>
+                            <td style=" background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Receiver_District__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId11" label="Receiver District"
+                                    objectType="District__c" primarySearchField="Name"
+                                    selectedRecordId="{!v.receiverDistrict}"
+                                    queryCondition="{!'City_Province__c=\'' + v.receiverCity + '\''}"
+                                    dropDownQuery="Name != null" />
+                            </td>
+                        </tr>
+                        <tr style="border-color: white; background-color: rgb(188, 210, 238, 0); overflow-x: hidden;">
+                            <td></td>
+                            <td style=" background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_Ward__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId12" label="Sender Ward" objectType="Ward__c"
+                                    primarySearchField="Name" selectedRecordId="{!v.senderWard}"
+                                    queryCondition="{!'City_Province__c=\'' + v.senderCity + '\' AND District__c=\'' + v.senderDistrict + '\''}"
+                                    dropDownQuery="Name != null" />
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td style="background-color: rgb(188, 210, 238, 0);">
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Receiver_Ward__c}</label>
+                                <l_lookup:Lookup aura:id="uniqueLookupId13" label="Receiver Ward" objectType="Ward__c"
+                                    primarySearchField="Name" selectedRecordId="{!v.receiverWard}"
+                                    queryCondition="{!'City_Province__c=\'' + v.receiverCity + '\' AND District__c=\'' + v.receiverDistrict + '\''}"
+                                    dropDownQuery="Name != null" />
+                            </td>
+                        </tr>
+                        <tr style="border-color: white; background-color: rgb(188, 210, 238, 0); overflow-x: hidden;">
+                            <td></td>
+                            <td>
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Sender_Address__c}</label>
+                                <lightning:inputField aura:id="field" fieldName="Sender_Address__c"
+                                    value="{!v.Order1.Sender_Address__c}" />
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <label class="" for="input-299" part="label">{!v.fieldLabels.Receiver_address__c}</label>
+                                <lightning:inputField aura:id="field" fieldName="Receiver_address__c"
+                                    value="{!v.Order1.Receiver_address__c}" />
+                            </td>
+                        </tr>
+                        <br />
+                        <br />
+                    </table>
+
+                    <div style="display: flex;">
+                        <div style="width: 49.5%;">
+                            <table style="width: 100%;">
+                                <col width="25%" />
+                                <col width="24.5%" />
+                                <tr>
+                                    <th colspan="2" style="background-color: #E5E5E5;padding: 0px; ">
+                                        <div class="slds-truncate" style="font-weight: bold;font-size: 15px;">Cước Phí
+                                        </div>
+                                    </th>
+
+                                </tr>
+                                <tr>
+
+                                    <td style="vertical-align: top;">
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Invoice_To__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Invoice_To__c"
+                                            value="{!v.Order1.Invoice_To__c}" />
+                                    </td>
+                                    <td style="vertical-align: middle !important;">
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Need_To_COD__c}</label>
+                                        <lightning:input class="myCheckbox" type="checkbox"
+                                            value="{!v.Order1.Need_To_COD__c}" checked="{!v.Order1.Need_To_COD__c}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top;">
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.E_shipping_charge__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="E_shipping_charge__c"
+                                            value="{!v.Order1.E_shipping_charge__c}" />
+                                    </td>
+                                    <td style="vertical-align: middle !important;">
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.codeuqalcargovalue__c}</label>
+                                        <lightning:input class="myCheckbox" type="checkbox"
+                                            value="{!v.Order1.codeuqalcargovalue__c}"
+                                            checked="{!v.Order1.codeuqalcargovalue__c}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.E_shipping_charge__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="E_shipping_charge__c"
+                                            value="{!v.Order1.E_shipping_charge__c}" />
+                                    </td>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Discount_code__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Discount_code__c"
+                                            value="{!v.Order1.Discount_code__c}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Cash_on_delivery__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Cash_on_delivery__c"
+                                            value="{!v.Order1.Cash_on_delivery__c}" />
+                                    </td>
+                                    <td>
+                                        <label class="" for="input-299"
+                                            part="label">{!v.fieldLabels.Insurance__c}</label>
+                                        <lightning:inputField aura:id="field" fieldName="Insurance__c"
+                                            value="{!v.Order1.Insurance__c}" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="width: 1%;"></div>
+                        <div style="width: 49.5%;">
+                            <lightning:recordEditForm class="iteration" aura:id="recordEditForm"
+                                objectApiName="Package__c" onerror="{!c.onError}">
+                                <table class="myTable" style="width: 100%;">
+                                    <col width="3%" />
+                                    <col width="11%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="3.5%" />
+                                    <tr>
+                                        <th colspan="6" style="background-color: #E5E5E5;padding: 0px !important;">
+                                            <div class="slds-truncate" style="font-weight: bold;font-size: 15px;">
+                                                Thông tin hàng
+                                            </div>
+                                        </th>
+
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="padding: 0px !important;">
+                                            <label class="" for="input-299"
+                                                part="label">{!v.fieldLabels.Parcel_name__c}</label>
+                                            <lightning:inputField aura:id="field" fieldName="Parcel_name__c"
+                                                value="{!v.Order1.Parcel_name__c}" />
+                                        </td>
+                                        <td colspan="3" style="padding: 0px !important;">
+                                            <label class="" for="input-299"
+                                                part="label">{!v.fieldLabels.Parcel_category__c}</label>
+                                            <lightning:inputField aura:id="field" fieldName="Parcel_category__c"
+                                                value="{!v.Order1.Parcel_category__c}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <label class="" for="input-299"
+                                                part="label">{!v.fieldLabels.Length_cm__c}</label>
+                                            <lightning:inputField aura:id="field" fieldName="Length_cm__c"
+                                                value="{!v.Order1.Length_cm__c}" />
+                                        </td>
+                                        <td colspan="2">
+                                            <label class="" for="input-299"
+                                                part="label">{!v.fieldLabels.Width_cm__c}</label>
+                                            <lightning:inputField aura:id="field" fieldName="Width_cm__c"
+                                                value="{!v.Order1.Width_cm__c}" />
+                                        </td>
+                                        <td colspan="2">
+                                            <label class="" for="input-299"
+                                                part="label">{!v.fieldLabels.Height_cm__c}</label>
+                                            <lightning:inputField aura:id="field" fieldName="Height_cm__c"
+                                                value="{!v.Order1.Height_cm__c}" />
+                                        </td>
+                                    </tr>
+                                    <br />
+                                    <br />
+                                    <tr>
+                                        <th colspan="6"
+                                            style="background-color: #E5E5E5;font-weight: bold;font-size: 15px;padding: 0px !important;">
+                                            Kiện hàng
+                                            chi tiết</th>
+                                    </tr>
+                                    <aura:iteration items="{!v.lstPackage1}" var="p" indexVar="index">
+                                        <tr>
+                                            <td style="{!IF(index > 0,'border-top: 1px solid black;','')}"></td>
+                                            <td colspan="2" style="{!IF(index > 0,'border-top: 1px solid black;','')}">
+                                                <label class="" for="input-299"
+                                                    part="label">{!v.fieldLabels.Parcel_Name__c}</label>
+                                                <lightning:inputField aura:id="field" fieldName="Parcel_Name__c"
+                                                    variant="label-hidden" value="{!p.Parcel_Name__c}" />
+                                            </td>
+                                            <td colspan="2" style="{!IF(index > 0,'border-top: 1px solid black;','')}">
+                                                <label class="" for="input-299"
+                                                    part="label">{!v.fieldLabels.Parcel_Value__c}</label>
+                                                <lightning:inputField aura:id="field" fieldName="Parcel_Value__c"
+                                                    variant="label-hidden" value="{!p.Parcel_Value__c}" />
+                                            </td>
+                                            <td style="{!IF(index > 0,'border-top: 1px solid black;','')}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                {!index + 1}
+                                            </td>
+                                            <td colspan="2" style="">
+                                                <label for="input-299"
+                                                    part="label">{!v.fieldLabels.Gross_Weight_Kg__c}</label>
+                                                <lightning:inputField aura:id="field" fieldName="Gross_Weight_Kg__c"
+                                                    variant="label-hidden" value="{!p.Gross_Weight_Kg__c}" />
+                                            </td>
+                                            <td colspan="2" style="">
+                                                <label class="" for="input-299"
+                                                    part="label">{!v.fieldLabels.Quantity__c}</label>
+                                                <lightning:inputField aura:id="field" fieldName="Quantity__c"
+                                                    variant="label-hidden" value="{!p.Quantity__c}" />
+                                            </td>
+                                            <td style="text-align: center">
+                                                <a onclick="{!c.removeRecord}" data-record="{!index}">
+                                                    <lightning:icon iconName="utility:delete" size="small"
+                                                        alternativeText="Delete" />
+                                                    <span class="slds-assistive-text">Delete</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                    <tr>
+                                        <th></th>
+                                        <th colspan="5">
+                                            <div>
+                                                <!-- <button class="myBtn" onclick="{!c.}">&#43;</button> -->
+                                                <lightning:button class="myBtn" variant="brand" label="+"
+                                                    title="Brand action" onclick="{!c.addRow}" />
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </lightning:recordEditForm>
+                        </div>
+                    </div>
+                    <div style="display: flex;background-color: white;justify-content: center; margin-top: 30px;">
+                        <lightning:button variant="brand" label="Submit" title="Brand action"
+                            onclick="{!c.saveRecords}" />
+                            
+                    </div>
+                </div>
+            </lightning:recordEditForm>         
+        </div>
+        <!-- <br />
+    <div style="font-size: 20px; font-weight: bold;">Package</div>
+    <div>
+        <aura:iteration items="{!v.lstPackage}" var="p" indexVar="index">
+            <lightning:recordEditForm class="iteration" aura:id="recordEditForm" objectApiName="Package__c"
+                onerror="{!c.onError}">
+                <div class="slds-grid slds-gutters">
+                    <div class="">
+                        <span style="{!IF(index != 0,'visibility: hidden','')}">No</span>
+                        <p>{!index + 1}</p>
+                    </div>
+                    <div class="slds-col slds-gutters_x-small">
+                        <span style="{!IF(index != 0,'visibility: hidden','')}">Tên hàng hoá</span>
+                        <lightning:inputField aura:id="field" variant="label-hidden" fieldName="Parcel_Name__c"
+                            value="{!p.Parcel_Name__c}" />
+                    </div>
+                    <div class="slds-col slds-gutters_x-small">
+                        <span style="{!IF(index != 0,'visibility: hidden','')}">Giá trị hàng</span>
+                        <lightning:inputField aura:id="field" variant="label-hidden" fieldName="Parcel_Value__c"
+                            value="{!p.Parcel_Value__c}" />
+                    </div>
+                    <div class="slds-col slds-gutters_x-small">
+                        <span style="{!IF(index != 0,'visibility: hidden','')}">Trọng lượng</span>
+                        <lightning:inputField aura:id="field" variant="label-hidden" fieldName="Gross_Weight_Kg__c"
+                            value="{!p.Gross_Weight_Kg__c}" />
+                    </div>
+                    <div class="slds-col slds-gutters_x-small">
+                        <span style="{!IF(index != 0,'visibility: hidden','')}">Số lượng</span>
+                        <lightning:inputField aura:id="field" variant="label-hidden" fieldName="Quantity__c"
+                            value="{!p.Quantity__c}" />
+                    </div>
+                    <div class="slds-col slds-gutters_x-small">
+                        <span style="{!IF(index != 0,'visibility: hidden','')}">Action</span>
+                        <div>
+                            <a onclick="{!c.removeRecord}" data-record="{!index}">
+                                <lightning:icon iconName="utility:delete" size="small" alternativeText="Delete" />
+                                <span class="slds-assistive-text">Delete</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </lightning:recordEditForm>
+        </aura:iteration>
+    </div>
+    <div class="slds-align_absolute-center slds-p-top_small" style="padding-top: 150px">
+        <lightning:button variant="brand" label="Add" title="Brand action" onclick="{!c.addRow}" />
+        <lightning:button variant="brand" label="Submit" title="Brand action" onclick="{!c.saveRecords}" />
+    </div> -->
+    </div>
+</aura:component>
