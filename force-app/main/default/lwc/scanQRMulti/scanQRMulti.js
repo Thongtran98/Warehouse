@@ -155,7 +155,7 @@ export default class ScanQRMulti extends LightningElement {
                     findStorageRack({rackId: result.value})
                     .then((recordRackPack)=>{
                         this.rackLabelPackage = recordRackPack.Id;
-                        this.LocationRack = recordRackPack.WarehouseLocation__c;
+                        this.LocationRackPackage = recordRackPack.WarehouseLocation__c;
                     })
                 })
                 .catch((error) => {
@@ -421,7 +421,6 @@ export default class ScanQRMulti extends LightningElement {
                             let recordInputP = { 
                                 fields : fieldP
                             };
-     
                             if(record.WarehouseLocation__c == this.LocationRackPackage){
                                 createRecord(recordInputWW)
                                 .then(() => {
