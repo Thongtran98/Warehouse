@@ -255,7 +255,7 @@ export default class scanQRChangeStatusSOImport extends LightningElement {
 
                             let fieldP = {};
                             fieldP[ID_PACK.fieldApiName] = record.Id;
-                            fieldP[STATUS_PACK.fieldApiName] = 'Đã xuất kho';
+                            fieldP[STATUS_PACK.fieldApiName] = 'Đã nhập kho';
                             fieldP[WAREHOUSE_PACK.fieldApiName] = warr.Id;
                             fieldP[LOCATION_PACK.fieldApiName] = this.selectedLabelPackage;
     
@@ -263,7 +263,7 @@ export default class scanQRChangeStatusSOImport extends LightningElement {
                                 fields : fieldP
                             };
                             alert(record.PackageStatus__c);
-                            if(record.PackageStatus__c === 'Đang chờ xuất'){
+                            if(record.PackageStatus__c === 'Đã lấy' || record.PackageStatus__c === 'Đang xuất kho'){
                                 updateRecord(recordInputP)
                                 .then(() => {
                                     this.dispatchEvent(
