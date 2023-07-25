@@ -3,6 +3,8 @@ import start_scan from './start_scan.html';
 import pick_rack_package from './pick_rack_package.html';
 import pick_rack from './pick_rack.html';
 import scanMultiPackage from './scanQRMultiPackage.html';
+import scanPackage from './scanPackage.html';
+import scanOrder from './scanOrder.html';
 import scanMulti from './scanQRMulti.html';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getBarcodeScanner } from 'lightning/mobileCapabilities';
@@ -73,73 +75,20 @@ export default class ScanQRMulti extends LightningElement {
                 return scanMulti;
             case "5":
                 return scanMultiPackage;
+            case "6":
+                return scanPackage;
+            case "7":
+                return scanOrder;
     }
 }
     
-    onScan(event){
-        this.scannedBarcode = '';
-        this.name = '';
-
-        if (this.myScanner != null && this.myScanner.isAvailable()) {
-            const scanningOptions = {
-                barcodeTypes: this.selectedBarcodeTypes(),
-                instructionText: 'Scan a QR Code',
-                successText: 'Scanning complete.'
-            };
-            this.myScanner
-                .beginCapture(scanningOptions)
-                .then((result) => {
-                    findStorageRack({rackId: result.value})
-                    .then((recordRack)=>{
-                        this.rackLabel = recordRack.Id;
-                        this.LocationRack = recordRack.WarehouseLocation__c;
-                    })
-                    
-                })
-                .catch((error) => {
-                    console.error(error);
-                    if (error.code == 'userDismissedScanner') {
-                        // User clicked Cancel
-                        this.dispatchEvent(
-                            new ShowToastEvent({
-                                title: 'Scanning Cancelled',
-                                message:
-                                    'You cancelled the scanning session.',
-                                mode: 'sticky'
-                            })
-                        );
-                    }
-                    else { 
-                        this.dispatchEvent(
-                            new ShowToastEvent({
-                                title: 'Barcode Scanner Error',
-                                message:
-                                    'There was a problem scanning the barcode: ' +
-                                    error.message,
-                                variant: 'error',
-                                mode: 'sticky'
-                            })
-                        );
-                    }
-                })
-                .finally(() => {
-                    console.log('#finally');
-                    this.myScanner.endCapture();
-                });
-        } else {
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Barcode Scanner Is Not Available',
-                    message:
-                        'Try again from the Salesforce app on a mobile device.',
-                    variant: 'error'
-                })
-            );
-        }
-        
-        this.screenNumber = "4";
+    onScan(event){ 
+        this.screenNumber = "7";
     }
     onScanPackage(){
+        this.screenNumber = "6";
+    }
+    scanForPackage(){
         this.scannedBarcode = '';
         this.name = '';
 
@@ -200,7 +149,80 @@ export default class ScanQRMulti extends LightningElement {
         }
         this.screenNumber = "5";
     }
+    clickBack(){
+        this.screenNumber = "1";
+    }
+    scanForOrder(){
+        this.scannedBarcode = '';
+        this.name = '';
 
+        if (this.myScanner != null && this.myScanner.isAvailable()) {
+            const scanningOptions = {
+                barcodeTypes: this.selectedBarcodeTypes(),
+                instructionText: 'Scan a QR Code',
+                successText: 'Scanning complete.'
+            };
+            this.myScanner
+                .beginCapture(scanningOptions)
+                .then((result) => {
+                    findStorageRack({rackId: result.value})
+                    .then((recordRack)=>{
+                        this.rackLabel = recordRack.Id;
+                        this.LocationRack = recordRack.WarehouseLocation__c;
+                    })
+                    
+                })
+                .catch((error) => {
+                    console.error(error);
+                    if (error.code == 'userDismissedScanner') {
+                        // User clicked Cancel
+                        this.dispatchEvent(
+                            new ShowToastEvent({
+                                title: 'Scanning Cancelled',
+                                message:
+                                    'You cancelled the scanning session.',
+                                mode: 'sticky'
+                            })
+                        );
+                    }
+                    else { 
+                        this.dispatchEvent(
+                            new ShowToastEvent({
+                                title: 'Barcode Scanner Error',
+                                message:
+                                    'There was a problem scanning the barcode: ' +
+                                    error.message,
+                                variant: 'error',
+                                mode: 'sticky'
+                            })
+                        );
+                    }
+                })
+                .finally(() => {
+                    console.log('#finally');
+                    this.myScanner.endCapture();
+                });
+        } else {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Barcode Scanner Is Not Available',
+                    message:
+                        'Try again from the Salesforce app on a mobile device.',
+                    variant: 'error'
+                })
+            );
+        }
+        this.screenNumber = "4";
+    }
+    clickBackOrder(){
+        this.screenNumber = "1";
+    }
+    Backback(){
+        this.screenNumber = "7";
+    }
+    BackbackPackage(){
+        this.screenNumber = "6";
+    }
     connectedCallback() {
         this.myScanner = getBarcodeScanner();
         if (this.myScanner == null || !this.myScanner.isAvailable()) {
@@ -390,10 +412,9 @@ export default class ScanQRMulti extends LightningElement {
                         // pickWarehouse()
                         // .then((warr)=>{
                             let fieldWW = {};
-                            if(record.Schedules__c != null){
-                                fieldWW[WAREHOUSE_PACKITEM.fieldApiName] = record.Warehouse__c;
-                                
-                            }
+                            fieldWW[WAREHOUSE_PACKITEM.fieldApiName] = record.Warehouse__c;
+                            fieldWW[LOCATION_PACKITEM.fieldApiName] = record.WarehouseLocation__c;
+
                             fieldWW[PACKAGE_PACKITEM.fieldApiName] = record.Id;
                             if(record.Warehouse__c != null){
                                 fieldWW[NAME_PACKITEM.fieldApiName] = record.Name +' + '+record.Warehouse__r.Name;

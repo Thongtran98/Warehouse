@@ -1,0 +1,11 @@
+<template>
+    <div class="container">
+        <div style="text-align: center;" class="center clear-it">
+            <div class="slds-text-body_regular medium-text"><strong>Vui lòng Scan chọn kệ hàng</strong></div>
+        </div>
+        <div class="slds-align_absolute-center slds-m-vertical_large">  
+            <lightning-button style="border-radius: 15%;padding: 5px 10px;text-align: center;border-color: #313132;" class="slds-var-m-left_x-small" label="Scan" onclick={scanForPackage} variant="base" disabled={scanButtonDisabled}></lightning-button>
+            <lightning-button style="border-radius: 15%;padding: 5px 10px;text-align: center;border-color: #416dea;color: #fff;" label="Back" onclick={clickBack} variant="base" class="slds-m-left_small nav-button right" disabled={scanButtonDisabled}></lightning-button>
+        </div>
+    </div>
+</template>

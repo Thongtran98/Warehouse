@@ -356,6 +356,15 @@ export default class BarcodeAddRack extends LightningElement {
                                     resolve();
                                 })
                             })
+                            .catch(error=>{
+                                this.dispatchEvent(
+                                    new ShowToastEvent({
+                                        title: 'Tạo record k thành công.',
+                                        message: error.body.message,
+                                        variant: 'error'
+                                    })
+                                );
+                            })
                             .then(()=>{
                             updateRecord(recordInputP)
                             .then(() => {

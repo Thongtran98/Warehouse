@@ -27,6 +27,7 @@ import pickWarehouse from '@salesforce/apex/scanQRChangeStatusSOController.pickW
 import ID_PACK from '@salesforce/schema/Package__c.Id';
 import STATUS_PACK from '@salesforce/schema/Package__c.PackageStatus__c';
 import WAREHOUSE_PACK from '@salesforce/schema/Package__c.Warehouse__c';
+import RACK_PACK from '@salesforce/schema/Package__c.StorageRack__c';
 import LOCATION_PACK from '@salesforce/schema/Package__c.WarehouseLocation__c';
 // Package Item
 import PACKAGEITEM_OBJECT from "@salesforce/schema/StockOutPackage__c";
@@ -70,6 +71,9 @@ export default class scanQRChangeStatusSO extends LightningElement {
     }
     onScanPackage(){
         this.screenNumber = "2";
+    }
+    clickBackMain(){
+        this.screenNumber = "1";
     }
     connectedCallback() {
         this.myScanner = getBarcodeScanner();
@@ -243,7 +247,8 @@ export default class scanQRChangeStatusSO extends LightningElement {
                             fields[STATUS_PACK.fieldApiName] = 'Đã xuất kho';
                             fields[WAREHOUSE_PACK.fieldApiName] = null;
                             fields[LOCATION_PACK.fieldApiName] = null;
-    
+                            fields[RACK_PACK.fieldApiName] = null;
+                            
                             const recordInput = { 
                                 fields};
 

@@ -1,6 +1,6 @@
 <template>
     <div class="slds-text-align_center">
-        <span class="slds-text-heading_large">Cập nhật Package</span>
+        <span class="slds-text-heading_large">Cập nhật kiện hàng</span>
     </div>
 
     <!-- After a barcode is successfully scanned, 
@@ -16,7 +16,7 @@
 
     <!-- Static help text -->
     <div class="slds-text-align_center slds-text-color_weak slds-m-vertical_large">
-        Bấm <strong>Scan</strong> để quét mã QR của đơn hàng cần cập nhật Package.
+        Bấm <strong>Scan</strong> để quét mã QR của kiện hàng.
     </div>
 
     <!-- The click-to-scan button;
@@ -31,5 +31,6 @@
             title="Open a camera view and look for a barcode to scan"
             onclick={handleBeginScanClickPackage}>
         </lightning-button>
+        <lightning-button style="border-radius: 15%;padding: 5px 10px;text-align: center;border-color: #416dea;color: #fff;" label="Back" onclick={clickBackMainPackage} variant="base" class="slds-m-left_small nav-button right" disabled={scanButtonDisabled}></lightning-button>
     </div>
 </template>

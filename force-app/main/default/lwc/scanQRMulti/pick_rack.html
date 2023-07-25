@@ -1,11 +1,11 @@
 <template>
     <div class="container">
         <div class="center clear-it">
-            <div class="slds-text-heading_large large-text">Barcode Scanner</div>
+            <!-- <div class="slds-text-heading_large large-text">Barcode Scanner</div> -->
             <img class="splash" src={splashLogo}>
-            <div class="slds-text-body_regular medium-text">Vui lòng chọn Storage Rack</div>
+            <div class="slds-text-body_regular medium-text">Vui lòng chọn kệ hàng</div>
         </div>
-        <div>
+        <div style="height: 700px;">
             <lightning-combobox
                 name="Select Object"
                 label="Select Object"
@@ -17,7 +17,7 @@
             </lightning-combobox>
             </div>
         <div>
-            <lightning-button label="Lưu" onclick={clickChange} variant="base" class="slds-m-left_small nav-button right"></lightning-button>
+            <lightning-button label="Lưu" onclick={clickChange} variant="base" class="slds-m-left_small nav-button right" disabled={scanButtonDisabled}></lightning-button>
         </div>
     </div>
 </template>

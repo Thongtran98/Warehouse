@@ -1,14 +1,14 @@
 <template>
     <div class="container">
         <div class="center clear-it">
-            <div class="slds-text-heading_large large-text">Barcode Scanner</div>
+            <!-- <div class="slds-text-heading_large large-text">Barcode Scanner</div> -->
             <img class="splash" src={splashLogo}>
-            <div class="slds-text-body_regular medium-text">Đưa thiết bị đến mã QR cần quét</div>
+            <div class="slds-text-body_regular medium-text">Vui lòng chọn khu vực cần nhập</div>
         </div>
-        <div>
+        <div style="height: 700px;">
             <lightning-combobox
                 name="Select Object"
-                label="Select Object"
+                label="Khu vực trong kho"
                 value={value}
                 placeholder="Select Object"
                 options={warehouseShow} 
@@ -17,7 +17,8 @@
             </lightning-combobox>
             </div>
         <div>
-            <lightning-button style="border-radius: 15%;padding: 5px 10px;text-align: center;border-color: #416dea;color: #fff;" label="Lưu" onclick={clickChange} variant="base" class="slds-m-left_small nav-button right"></lightning-button>
+            <lightning-button style="border-radius: 15%;padding: 5px 10px;text-align: center;border-color: #416dea;color: #fff;" label="Lưu" onclick={clickChange} variant="base" class="slds-m-left_small nav-button right" disabled={scanButtonDisabled}></lightning-button>
+            <lightning-button style="border-radius: 15%;padding: 5px 10px;text-align: center;border-color: #416dea;color: #fff;" label="Back" onclick={clickBack} variant="base" class="slds-m-left_small nav-button right" disabled={scanButtonDisabled}></lightning-button>
         </div>
     </div>
 </template>

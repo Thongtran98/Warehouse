@@ -90,12 +90,43 @@ export default class scanQRChangeStatusSOImport extends LightningElement {
         this.selectedLabelPackage = event.target.options.find(opt => opt.value === event.target.value).value;
     }
     clickChange(){
-
-        this.screenNumber = "4";
+        if(this.selectedLabel == 'none'){
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Vui lòng chọn khu vực',
+                    // message: 'Vui lòng chọn khu vực ',
+                    variant: 'error'
+                })
+            );
+        }else{
+            this.screenNumber = "4";
+        }
+    }
+    clickBack(){
+        this.screenNumber = "1";
+    }
+    clickBackMain(){
+        this.screenNumber = "2";
+    }
+    clickBackPackage(){
+        this.screenNumber = "1";
+    }
+    clickBackMainPackage(){
+        this.screenNumber = "3";
     }
     clickChangePackage(){
-
-        this.screenNumber = "5";
+        if(this.selectedLabelPackage == 'none'){
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Vui lòng chọn khu vực',
+                    // message: 'Vui lòng chọn khu vực ',
+                    variant: 'error'
+                })
+            );
+        }else{
+            this.screenNumber = "5";
+        }
+        // this.screenNumber = "5";
     }
     connectedCallback() {
         this.myScanner = getBarcodeScanner();
@@ -263,7 +294,7 @@ export default class scanQRChangeStatusSOImport extends LightningElement {
                                 fields : fieldP
                             };
                             
-                            if(record.PackageStatus__c === 'Đã lấy' || record.PackageStatus__c === 'Đang xuất kho'){
+                            if(record.PackageStatus__c === 'Đã lấy' || record.PackageStatus__c === 'Đã xuất kho'){
                                 updateRecord(recordInputP)
                                 .then(() => {
                                     this.dispatchEvent(
